@@ -12,10 +12,10 @@
   <body>
     <!-- Import maps polyfill -->
     <!-- Remove this when import maps will be widely supported -->
-    <script
+    <!-- <script
       async
       src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
-    ></script>
+    ></script> -->
 
     <script type="importmap">
       {
@@ -41,6 +41,7 @@
       let spotLight3, lightHelper3;
       let spotLight4, lightHelper4;
       var meshOfModel;
+      let loadedModel;
       var gltf_loader = new GLTFLoader();
 
       init();
@@ -95,7 +96,7 @@
           textures[filename] = texture;
         }
 
-        loadModel("/Models/mig-17.glb", 1, 1, 1);
+        loadModel("/Models/SA2.glb", 10, 10, 10);
 
         //spotLight1
         spotLight = new THREE.SpotLight(0xffffff, 5);
@@ -280,21 +281,23 @@
 
         gui.open();
       }
-
-      function loadModel(modelPath, x = 2, y = 3, z = 6) {
+   
+      function loadModel(modelPath, x = 1, y = 1, z = 1) {
         gltf_loader.load(modelPath, function (gltf) {
-            scene.remove(meshOfModel);
-            meshOfModel = gltf.scene;
-            meshOfModel.rotation.y = - Math.PI / 2;
-            meshOfModel.position.set(0, 0, 0);
-            gltf.scene.scale.set(x, y, z);
-            scene.add(meshOfModel);
-            //const container1 = document.getElementById("viewer");
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+          loadedModel = gltf;
+          scene.remove(meshOfModel);
+          meshOfModel = gltf.scene;
+          meshOfModel.rotation.y = -Math.PI / 2;
+          meshOfModel.position.set(0, 0, 0);
+          gltf.scene.scale.set(x, y, z);
+          scene.add(meshOfModel);
+          //const container1 = document.getElementById("viewer");
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
 
-            render();
+          render();
+          // animate();
         });
         // gltf_loader.load(
         //   //model here
@@ -305,7 +308,17 @@
         //   }
         // );
       }
-
+      //load animate
+      // const animate = () => {
+      //   if (loadedMode) {
+      //     loadedMode.scene.scale.set(10, 10, 10);
+      //     loadedMode.scene.rotation.x += 0.01;
+      //     loadedMode.scene.rotation.y += 0.01;
+      //     loadedMode.scene.rotation.z += 0.01;
+      //   }
+      //   requestAnimationFrame(animate);
+      // };
+      // animate();
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
